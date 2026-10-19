@@ -1,47 +1,43 @@
-// Frameworks, pacotes e bibliotecas
-import { test, expect} from '@playwright/test'
+import { test } from '@playwright/test'
+import HomePage from '../pages/home.pages.js'
+import ReservePage from '../pages/reserve.page.js'
+import PurchasePage from '../pages/purchase.page.js'
+import ConfirmationPage from '../pages/confirmation.page.js'
 
-// Funções ou métodos (testes)
-test("Comprar Passagem", async ( {page} ) => {
+test('Comprar Passagem', async ({ page }) => {
+    const homePage = new HomePage(page)
+    const reservePage = new ReservePage(page)
+    const purchasePage = new PurchasePage(page)
+    const confirmationPage = new ConfirmationPage(page)
 
-    // abrir o navegador
-    await page.goto('https://blazedemo.com/')
+    await homePage.visit()
+    await homePage.selecionar_viagem('São Paolo', 'London')
 
-    // selecionar as cidades de origem e destino, clicar em Finf Flights
-    await page.locator('select[name="fromPort"]').selectOption("São Paolo")
-    await page.locator('select[name="toPort"]').selectOption("London")
-    await page.locator('.btn-primary').click()
+    await reservePage.validar_pagina('São Paolo', 'London')
+    await reservePage.selecionar_voo('9696')
 
-    // transição de página
-    // verificar o endereço da página e o texto âncora
-    await expect(page).toHaveURL(/reserve\.php/)
-    await expect(page.locator('h3')).toHaveText('Flights from São Paolo to London:')
+    await purchasePage.validar_pagina()
+    await purchasePage.preencher_dados_compra('Eduardo', 'amex', true)
+    await purchasePage.comprar()
 
-    // selecionar o botão com base nas informações do vôo
-    await page.getByRole('row', { name: 'Choose This Flight 9696 Aer Lingus 5:27 AM 8:22 PM $200.98'})
-    .getByRole('button').click()
+    await confirmationPage.validar_pagina()
+    await confirmationPage.validar_valor_passagem('555 USD')
+})
 
-    // transição de página
-    // verificar o endereço da página e o texto âncora
-    // espera a página carregar antes de prosseguir
-    await page.waitForURL(/purchase\.php/);
-    await expect(page).toHaveURL(/purchase\.php/)
-    await expect(page.locator('h2')).toHaveText('Your flight from TLV to SFO has been reserved.')
+test('Login com usuário não cadastrado', async ({ page }) => {
+    const homePage = new HomePage(page)
 
-    // preencher primeiro nome, bandeira do cartão e lembre-se de mim
-    await page.locator('#inputName').fill('Eduardo')
-    await page.locator('#cardType').selectOption('amex')
-    await page.locator("#rememberMe").check()
-    // clicar no botão Purchase Flight
+    await homePage.visit()
+    await homePage.abrir_login()
+
+    await page.waitForURL(/login/)
+    await page.locator('.panel-heading').toHaveText('Login')
+
+    await page.locator('#email').fill('Eduardo@test.com')
+    await page.locator('#password').fill('SuperSpecial*123')
+    await page.locator('input[name="remember"]').check()
     await page.locator('.btn.btn-primary').click()
 
-    // transição de página
-    // verificar o endereço da página e o texto âncora
-    await expect(page).toHaveURL(/confirmation\.php/)
-    await expect(page.locator('h1')).toHaveText('Thank you for your purchase today!')
-
-    // verificar o preço da passgem
-    await expect(page.getByRole('row', { name: 'Amount 555 USD'})).toBeVisible()
-
-}) // fecha o teste Comprar Passagem
+    await page.locator('.message').toHaveText('Page Expired')
+})
 
