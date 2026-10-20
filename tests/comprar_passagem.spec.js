@@ -41,3 +41,27 @@ test('Login com usuário não cadastrado', async ({ page }) => {
     await page.locator('.message').toHaveText('Page Expired')
 })
 
+ // Funções ou métodos (teste de login com usuário não cadastrado)
+test('Login com usuário não cadastrado', async ({ page }) => {
+
+  // abrir o navegador
+  await page.goto('https://blazedemo.com/')
+
+  // clicar em home
+   await page.getByRole('link', { name: 'home' }).click()
+
+  // transição de página
+  // verificar o endereço da página e o texto âncora
+  // espera a página carregar antes de prosseguir
+  await page.waitForURL(/login/);
+  await expect(page).toHaveURL(/login/)
+  await expect(page.locator('.panel-heading')).toHaveText('Login')
+    
+  // preencher E-Mail Address, Password e lembre-se de mim
+  await page.locator('#email').fill('Eduardo@test.com')
+  await page.locator('#password').fill('SuperSpecial*123')
+  await page.locator('.btn.btn-primary').click()
+
+  // verificar a mensagem 419 | Page Expired
+  await expect(page.locator('.message')).toHaveText('Page Expired')
+})
