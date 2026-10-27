@@ -2,7 +2,7 @@ class ReservePage {
 
     constructor(page) {
         this.page = page
-        this.url = 'reserve'
+        this.url = /reserve/
         this.titulosecao = 'h3' 
     }
 
@@ -13,12 +13,12 @@ class ReservePage {
             {name: `Choose this flight 
                 ${flight} 
                 ${airline} 
-                ${depart} 
+                ${departs} 
                 ${arrives} 
                 ${price}
-            `}).getByRole('button').click()
-        
-
+            `}).getByRole('button').click()       
+}
 
 }
+
 module.exports =  ReservePage 

@@ -10,7 +10,7 @@ test('Comprar Passagem', async ({ page }) => {
     const purchasePage = new PurchasePage(page)
     const confirmationPage = new ConfirmationPage(page)
 
-    await homePage.visit()
+    await page.goto('https://blazedemo.com/')
     await homePage.selecionar_viagem('São Paolo', 'London')
 
     await reservePage.validar_pagina('São Paolo', 'London')

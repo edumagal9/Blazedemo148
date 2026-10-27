@@ -2,7 +2,7 @@ class PurchasePage {
 
     constructor(page) {
         this.page = page
-        this.url = 'purchase'
+        this.url = /purchase/
         this.titulosecao = 'h2'                // seletor tipo tag
         this.name = '#inputName'              // seletor tipo id
         this.cardType = '[name="cardType"]'   // seletor tipo parametro
@@ -25,7 +25,8 @@ class PurchasePage {
     async clicar_para_concluir_compra() {
         await this.page.locator(this.btnPurchaseFlight).click()
     }
-}
+
+    }
 
 module.exports = PurchasePage
 

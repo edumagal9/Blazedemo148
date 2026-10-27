@@ -16,6 +16,7 @@ class HomePage{
         await this.page.locator(this.destino).selectOption(destino)
         await this.page.locator(this.btnFindFlights).click()
     } // fecha selecionar_viagem
+    
 
     // Assert - Valida
     // Faremos nos testes
