@@ -14,7 +14,7 @@ massa.forEach(({
       password    
 }) => {
  
-        test(`Realizar login - ${email}, ${password}`, async ({ page }) => {
+        test(`Realizar login - ${email}, ${password}`, async ({ page }) => 
             // Instanciar os objetos do Page Object
             const homePage = new HomePage(page)
             const loginPage = new LoginPage(page)
@@ -39,4 +39,4 @@ massa.forEach(({
             await loginPage.lembrar_de_mim()
             await loginPage.clicar_para_concluir_login()
             await expect(page.locator('.message')).toHaveText('Page Expired')
-)})                                                                
+)}) 
